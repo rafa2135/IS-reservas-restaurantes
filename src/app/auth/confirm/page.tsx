@@ -1,9 +1,9 @@
-// app/auth/confirm/page.tsx
-"use client"; // <--- Mark as a Client Component
-
+"use client";
+//cambiar este codigo mas adelante
+//hacerlo mas limpio
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation"; // Use next/navigation for App Router
-import { createClient } from "@/app/util/supabase/client"; // Adjust path as needed
+import { useRouter } from "next/navigation";
+import { createClient } from "@/app/util/supabase/client";
 
 type Status = "Verifying..." | "Success" | "Error";
 
@@ -29,7 +29,7 @@ export default function AuthConfirmPage() {
       }
     };
 
-    // Start a timeout to handle cases where no event fires (e.g., invalid link)
+    //timeout
     timeoutRef.current = setTimeout(() => {
       if (isMounted && status === "Verifying...") {
         console.log("Timeout reached, assuming verification failed.");
@@ -39,31 +39,30 @@ export default function AuthConfirmPage() {
         );
         clearUrlHash();
       }
-    }, 7000); // Wait 7 seconds before assuming failure
+    }, 7000); // esperar 7 segundos
 
-    // Listen for auth state changes
+    // cambio de estado de autenticacion
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      if (!isMounted) return; // Don't proceed if component unmounted
+      if (!isMounted) return; // verificacion de montado
 
       console.log("Auth Event:", event, "Session:", session);
 
-      // Clear the timeout if we receive any relevant event
+      // resetear timeout
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }
 
-      // Check for explicit errors in the URL hash first
-      // This needs to run client-side where window is available
+      // verificar si hay un error en la URL
       if (
         typeof window !== "undefined" &&
         window.location.hash.includes("error=")
       ) {
         const hashParams = new URLSearchParams(
           window.location.hash.substring(1)
-        ); // Remove '#'
+        );
         const error = hashParams.get("error");
         const errorDescription = hashParams.get("error_description");
 
@@ -74,32 +73,28 @@ export default function AuthConfirmPage() {
             errorDescription || "An error occurred during verification."
           );
           clearUrlHash();
-          return; // Stop further processing
+          return; // terminar funcion
         }
       }
 
-      // Handle successful verification (SIGNED_IN event usually occurs)
+      // el usuario está autenticado
       if (event === "SIGNED_IN" || event === "USER_UPDATED") {
-        // Check if the user object exists and email is confirmed
+        // verificar si el usuario tiene el email confirmado
         if (session?.user?.email_confirmed_at) {
           console.log("Email verification successful!");
           setStatus("Success");
           setErrorMessage("");
           clearUrlHash();
 
-          // Redirect after a short delay
+          // redireccionar el usuario
           setTimeout(() => {
-            router.push("/dashboard"); // Redirect to dashboard or home page
-          }, 2000); // 2 second delay
+            router.push("/dashboard"); // dashboard
+          }, 2000);
         } else if (session?.user && !session?.user?.email_confirmed_at) {
-          // User is signed in, but email not marked confirmed yet.
-          // This might happen briefly. Keep verifying or show error after timeout.
           console.warn(
             "User session found, but email not confirmed yet. Waiting or timeout will trigger error."
           );
-          // Keep status as 'Verifying...' - the timeout will handle failure if it persists
         } else {
-          // SIGNED_IN event but session/user is invalid - likely indicates an issue
           console.error(
             "SIGNED_IN event, but session or user invalid/unconfirmed."
           );
@@ -157,8 +152,6 @@ export default function AuthConfirmPage() {
             Please try signing up again or contact support if the problem
             persists.
           </p>
-          {/* Optional: Add a link back to login or signup */}
-          {/* <Link href="/login">Go to Login</Link> */}
         </>
       )}
     </div>

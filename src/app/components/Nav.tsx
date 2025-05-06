@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-// this is a component that will be used in the header it contains the menu and the links
+//nav component
 const Nav = () => {
   const [open, setOpen] = useState(false);
   const handleMenu = () => {
@@ -16,10 +16,10 @@ const Nav = () => {
           <Image src="/hamburger.png" alt="menu" fill />
         </button>
       </div>
-      <div //className={open ? "flex flex-col" : "hidden"} /* menu for mobile*/
+      <div
         className={`md:hidden absolute top-full left-0 w-full bg-amber-950 transition-all duration-300 ease-in-out overflow-hidden ${
-          open ? "max-h-[500px] py-4" : "max-h-0 py-0" // Use max-h for smooth transition
-        } flex flex-col`} // menu for mobile
+          open ? "max-h-[500px] py-4" : "max-h-0 py-0"
+        } flex flex-col`} // menu para mobile
       >
         <Link
           href="/about"
@@ -51,7 +51,7 @@ const Nav = () => {
           Login / registro
         </Link>
       </div>
-      <div className="hidden md:flex gap-4" /* menu for desktop*/>
+      <div className="hidden md:flex gap-4" /* menu para desktop*/>
         <Link href="/about">Conócenos</Link>
         <Link href="/restaurants">Restaurantes</Link>
         <Link href="/contacto">Contactanos</Link>

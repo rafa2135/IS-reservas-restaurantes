@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 interface CardProps {
   src: string;
   name?: string;
+  id: string;
 }
-const Card = ({ src, name = "Nombre por defecto" }: CardProps) => {
+const Card = ({ src, name = "Nombre por defecto", id }: CardProps) => {
   const [height, setHeight] = useState(0);
 
   const handleResize = () => {
@@ -38,7 +39,7 @@ const Card = ({ src, name = "Nombre por defecto" }: CardProps) => {
         massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper
         vel class apten
       </p>
-      <Link href={"/reservar/${id}"}>
+      <Link href={`/reservas/${id}`}>
         <button className="bg-red-950 text-white px-2 py-1">Reservar</button>
       </Link>
     </div>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Logo from "../components/Logo";
 import Nav from "./Nav";
-//this the header of the page it contains the logo and the menu and the links to diferent parts of this page
+
 const Header = () => {
   return (
     <header
