@@ -1,9 +1,10 @@
 // app/restaurants/[id]/page.tsx
-interface RestaurantPageProps {
-  params: { id: string };
-}
 
-export default async function RestaurantPage(props: RestaurantPageProps) {
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function RestaurantPage(props: Props) {
   const { id } = await props.params;
 
   return (

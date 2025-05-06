@@ -1,9 +1,9 @@
-interface ReservaPageProps {
-  params: { id: string };
-}
+type Props = {
+  params: Promise<{ id: string }>;
+};
 
-export default async function ReservaPage(props: ReservaPageProps) {
-  const { id } = await props.params;
+export default async function ReservaPage({ params }: Props) {
+  const { id } = await params;
 
   return (
     <main className="p-5">
